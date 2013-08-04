@@ -1,0 +1,47 @@
+<project name="Life" default="build" basedir=".">
+	<description>Build file for the ConsoleKit library.</description>
+
+	<!-- set global properties for this build -->
+	<property name="builddir" location="./build"/>
+	<property name="distdir"  location="./dist"/>
+	<property name="docsdir"  location="./docs"/>
+    <property name="packagename" value="ConsoleKit"/>
+	<property name="packagedir" value="abstrys/games/${packagename}"/>
+
+	<property name="libsrc" value="TerminalData.java TerminalInput.java TerminalListener.java TerminalPanel.java TerminalPrefs.java"/>
+
+	<!-- THE BUILD TARGETS -->
+	<target name="initbuild">
+		<tstamp/> <!-- Create the time stamp -->
+		<!-- create the necessary directories -->
+		<mkdir dir="${builddir}/${packagedir}"/>
+		<mkdir dir="${distdir}/${DSTAMP}"/>
+	</target>
+
+	<target name="build" depends="initbuild" description="build the library">
+		<javac includes="${libsrc}" srcdir="src/${packagedir}" destdir="${builddir}" listfiles="yes"/>
+		<jar jarfile="${distdir}/${DSTAMP}/${packagename}.jar" basedir="${builddir}">
+			<fileset dir="${builddir}/${packagedir}"/>
+		</jar>
+	</target>
+
+	<target name="docs" description="build the documentation">
+		<mkdir dir="${docsdir}"/>
+		<javadoc destdir="${docsdir}">
+			<fileset dir="src/${packagedir}">
+				<include name="*.java"/>
+				<exclude name="*Test*"/>
+			</fileset>
+		</javadoc>
+	</target>
+
+	<target name="clean" description="clean up the build files">
+		<delete dir="${builddir}"/>
+	</target>
+
+	<target name="spotless" depends="clean" description="clean up everything">
+		<delete dir="${distdir}"/>
+		<delete dir="${docsdir}"/>
+	</target>
+</project>
+
